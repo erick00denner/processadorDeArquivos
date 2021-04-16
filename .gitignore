@@ -129,10 +129,5 @@ dmypy.json
 .pyre/
 notebook.ipynb
 configBancos.csv
-log/log.txt
-source/metas - Copia.xlsx
-source/metas.xlsx
-source/Novo Documento de Texto - Copia (2).txt
-source/Novo Documento de Texto - Copia (3).txt
-source/Novo Documento de Texto - Copia.txt
-source/Novo Documento de Texto.txt
+log/
+source/
