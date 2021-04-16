@@ -1,4 +1,14 @@
 class Metas:
+    
+    def validaFormatoDados(self, df):
+        formatoDados = ['int64', 'int64', 'datetime64[ns]', 'float64']
+        formatoPlanilha = df.dtypes
+        count = 0
+        for item in formatoPlanilha:
+            if(item != formatoDados[count]):
+                return False
+            count += 1
+        return True      
 
     def processaArquivoMeta(self, df):
         

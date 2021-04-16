@@ -60,8 +60,12 @@ class Buscador:
                         #Após verificações genericas, instanciamento de objeto específico
                         from classesArquivos.metas import Metas
                         meta = Metas()
-                        meta.processaArquivoMeta(df)
-                        
+                        if (meta.validaFormatoDados(df)):
+                            meta.processaArquivoMeta(df)
+                        else:    
+                            from classesFuncoes.log import Log
+                            log = Log()
+                            log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')
                     else:
                         from classesFuncoes.log import Log
                         log = Log()
