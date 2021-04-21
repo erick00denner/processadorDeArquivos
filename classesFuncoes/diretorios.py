@@ -6,7 +6,7 @@ class Diretorios:
         import pandas as pd 
 
         #Arquivo de configurações dos diretorios
-        diretorios = pd.read_csv('configDiretorios.csv') 
+        diretorios = pd.read_csv('config/configDiretorios.csv') 
         #Diretorio fonte dos arquivos a serem processados
         self.__source = diretorios.loc[diretorios['dir'] == 'source']['caminho'].values.item() 
         #Diretorio para armazenamento de logs

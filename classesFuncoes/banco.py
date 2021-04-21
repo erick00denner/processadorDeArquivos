@@ -5,7 +5,7 @@ class Banco:
         import mysql.connector
         import pandas as pd
 
-        df = pd.read_csv('configBancos.csv')
+        df = pd.read_csv('config/configBancos.csv')
         dadosBD = df.loc[df['banco'] == banco]
         
         try:

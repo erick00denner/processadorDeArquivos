@@ -20,7 +20,7 @@ class Buscador:
         
             import pandas as pd 
 
-            arquivosParametrizados = pd.read_csv('configArquivos.csv')
+            arquivosParametrizados = pd.read_csv('config/configArquivos.csv')
             
             #Verifica se arquivos no diretorio source estão parametrizados no arquivo configArquivos.csv
             try:    
@@ -61,7 +61,7 @@ class Buscador:
                         from classesArquivos.metas import Metas
                         meta = Metas()
                         if (meta.validaFormatoDados(df)):
-                            meta.processaArquivoMeta(df)
+                            meta.processaArquivoMeta(df, item)
                         else:    
                             from classesFuncoes.log import Log
                             log = Log()
