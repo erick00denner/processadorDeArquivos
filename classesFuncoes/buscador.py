@@ -1,4 +1,3 @@
-
 class Buscador:
   
     #Busca arquivos no diretório source e retorna uma lista com os nomes
@@ -19,9 +18,11 @@ class Buscador:
     def verificaListaArquivos(self, lista):   
         
             import pandas as pd 
+            from classesFuncoes.configArquivo import ConfigArquivo
 
-            arquivosParametrizados = pd.read_csv('config/configArquivos.csv')
-            
+            configArquivo = ConfigArquivo()
+            arquivosParametrizados = configArquivo.leConfigArquivo()
+                        
             #Verifica se arquivos no diretorio source estão parametrizados no arquivo configArquivos.csv
             try:    
                 encontrados = set(arquivosParametrizados['nomeArquivo']).intersection(lista) 
@@ -47,7 +48,7 @@ class Buscador:
 
         for item in lista:
 
-            if (item == 'metas.xlsx'):                 
+            if (item == 'lancamentosmetas.xlsx'):                 
                 
                 #Função para leitura do arquivo e retorno de um dataset
                 df = arquivo.leArquivo(diretorio.source, item)

@@ -14,10 +14,10 @@ class Arquivos:
     def verificaColunas(self, df, nomeArquivo):
         
         import pandas as pd
+        from classesFuncoes.configArquivo import ConfigArquivo
 
-        arquivos = pd.read_csv('config/configArquivos.csv')
-        colPadrao = arquivos.loc[arquivos['nomeArquivo'] == nomeArquivo]['numColunas']
-        colPadrao = colPadrao.values.item()
+        configArquivo = ConfigArquivo()
+        colPadrao = configArquivo.numColunas(nomeArquivo)
         colCorrente = df.shape[1]
 
         if (colPadrao == colCorrente):
@@ -29,10 +29,11 @@ class Arquivos:
     def vericaNulos(self, df, nomeArquivo):
         
         import pandas as pd
+        from classesFuncoes.configArquivo import ConfigArquivo
 
-        arquivos = pd.read_csv('config/configArquivos.csv')
-        nanPadrao = arquivos.loc[arquivos['nomeArquivo'] == nomeArquivo]['permiteNaN']
-        nanPadrao = nanPadrao.values.item()
+        configArquivo = ConfigArquivo()
+
+        nanPadrao = configArquivo.permiteNaN(nomeArquivo)
         nanCorrente = df.isna().sum().sum()    
 
         if(nanPadrao == 0):
@@ -48,19 +49,27 @@ class Arquivos:
         from classesFuncoes.diretorios import Diretorios
         import shutil
         import os
-        from datetime import date
+        from datetime import datetime
         
         diretorio = Diretorios()
+        data = datetime.now()
+        data = data.strftime('%d-%m-%Y')
 
         if(sucesso):
             arquivo = diretorio.source + '/' + nomeArquivo
             shutil.move(arquivo,diretorio.processados)
-            arquivo = diretorio.processados + '/' + nomeArquivo
-            renomeia = diretorio.processados + '/success_'+str(date.today())+'_'+ nomeArquivo
+            quebraNome = nomeArquivo.split('.')
+            nomeArquivo = quebraNome[0]
+            extencao = quebraNome[1]
+            arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
+            renomeia = diretorio.processados +'/'+nomeArquivo +'_success_'+data+'.'+extencao
             os.rename(arquivo,renomeia)
         else:
             arquivo = diretorio.source + '/' + nomeArquivo
             shutil.move(arquivo,diretorio.processados)
-            arquivo = diretorio.processados + '/' + nomeArquivo
-            renomeia = diretorio.processados + '/error_'+str(date.today())+'_'+ nomeArquivo
+            quebraNome = nomeArquivo.split('.')
+            nomeArquivo = quebraNome[0]
+            extencao = quebraNome[1]
+            arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
+            renomeia = diretorio.processados +'/'+nomeArquivo +'_error_'+data+'.'+extencao            
             os.rename(arquivo,renomeia)

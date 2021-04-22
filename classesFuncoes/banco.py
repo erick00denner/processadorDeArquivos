@@ -22,11 +22,14 @@ class Banco:
         
         try:
             cursor.execute(query, dados)
+            cnx.commit()
+            cursor.close()
+            cnx.close()
+            return True
         except:
             from classesFuncoes.log import Log
             log = Log()
             log.geraLog('Não foi possível executar query. Classe: Banco Função: executaComando()')
-
-        cnx.commit()
-        cursor.close()
-        cnx.close()
+            cursor.close()
+            cnx.close()
+            return False

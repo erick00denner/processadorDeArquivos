@@ -24,24 +24,26 @@ class Metas:
 
         banco='metas'
         query ='INSERT INTO ft_lancamentometas (fk_postoAgencia, fk_metaID, dataVigencia, valorLancamento) VALUES (%s,%s,%s,%s)'
-        try:
-            for index, row in df.iterrows():
+   
+        for index, row in df.iterrows():
 
-                index
-                dados = []
+            index
+            dados = []
 
-                dados.append(row.posto)
-                dados.append(row.meta)
-                dados.append(row.dataVigencia)
-                dados.append(row.valorLancamento)
-                
-                bd.executaComando(banco,query,dados)
-        except:
+            dados.append(row.posto)
+            dados.append(row.meta)
+            dados.append(row.dataVigencia)
+            dados.append(row.valorLancamento)
+            
+            sucesso = bd.executaComando(banco,query,dados)
+        if (sucesso):
+            log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
+            arquivo.moveArquivo(nomeArquivo, True)    
+        else:
             log.geraLogArquivo(nomeArquivo,'Falha ao processar arquivo')        
             arquivo.moveArquivo(nomeArquivo, False)
 
-        log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
-        arquivo.moveArquivo(nomeArquivo, True)
+
 
 
         
