@@ -1,13 +1,15 @@
 class Log:
     
-    
     def geraLogArquivo(self,nomeArquivo,msg):
 
         from datetime import datetime
         from classesFuncoes.diretorios import Diretorios
 
         dirLog = Diretorios()
-        arquivoLog = dirLog.log +'/log.txt'
+        data = datetime.now()        
+        
+        data = data.strftime('%d-%m-%Y')
+        arquivoLog = dirLog.log +'/log-'+data+'.txt'
 
         arquivo = open(arquivoLog, "a")
 
@@ -32,11 +34,14 @@ class Log:
         from classesFuncoes.diretorios import Diretorios
 
         dirLog = Diretorios()
-        arquivoLog = dirLog.log +'/log.txt'
+        data = datetime.now()        
+        
+        data = data.strftime('%d-%m-%Y')
+        arquivoLog = dirLog.log +'/log-'+data+'.txt'
 
         arquivo = open(arquivoLog, "a")
 
-        dataHora = datetime.now()
+        dataHora = datetime.now()        
         dataHora = dataHora.strftime('%d/%m/%Y %H:%M')
 
         frase = list()

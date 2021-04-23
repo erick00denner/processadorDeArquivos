@@ -48,7 +48,7 @@ class Buscador:
 
         for item in lista:
 
-            if (item == 'lancamentosmetas.xlsx'):                 
+            if (item == 'metas.xlsx'):                 
                 
                 #Função para leitura do arquivo e retorno de um dataset
                 df = arquivo.leArquivo(diretorio.source, item)
@@ -62,16 +62,39 @@ class Buscador:
                         from classesArquivos.metas import Metas
                         meta = Metas()
                         if (meta.validaFormatoDados(df)):
-                            meta.processaArquivoMeta(df, item)
-                        else:    
-                            from classesFuncoes.log import Log
-                            log = Log()
-                            log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')
-                    else:
-                        from classesFuncoes.log import Log
-                        log = Log()
-                        log.geraLogArquivo(item,'Arquivo contém valores nulos')        
-                else:
-                    from classesFuncoes.log import Log
-                    log = Log()
-                    log.geraLogArquivo(item,'Número de colunas inválido')                
+                            meta.processaArquivoMeta(df, item)     
+
+            if (item == 'metasagencias.xlsx'):                 
+                
+                #Função para leitura do arquivo e retorno de um dataset
+                df = arquivo.leArquivo(diretorio.source, item)
+
+                #Se numero colunas do arquivo iguais ao numero de colunas configurada no configArquivos.csv 
+                if(arquivo.verificaColunas(df,item)):
+                    #Verifica quantidade de NaN no arquivo e se arquivo permite NaN
+                    if(arquivo.vericaNulos(df,item)):
+                        
+                        #Após verificações genericas, instanciamento de objeto específico
+                        from classesArquivos.metasAgencias import MetasAgencias
+                        metaag = MetasAgencias()
+                        if (metaag.validaFormatoDados(df)):
+                            metaag.processaArquivoMetasAgencias(df, item)           
+
+            if (item == 'lancamentosmetas.xlsx'):                 
+                
+                #Função para leitura do arquivo e retorno de um dataset
+                df = arquivo.leArquivo(diretorio.source, item)
+
+                #Se numero colunas do arquivo iguais ao numero de colunas configurada no configArquivos.csv 
+                if(arquivo.verificaColunas(df,item)):
+                    #Verifica quantidade de NaN no arquivo e se arquivo permite NaN
+                    if(arquivo.vericaNulos(df,item)):
+                        
+                        #Após verificações genericas, instanciamento de objeto específico
+                        from classesArquivos.lancamentoMetas import LancamentoMetas
+                        lanMeta = LancamentoMetas()
+                        if (lanMeta.validaFormatoDados(df)):
+                            lanMeta.processaArquivoLancamentoMetas(df, item)
+
+
+                                                            

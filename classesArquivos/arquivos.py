@@ -23,6 +23,9 @@ class Arquivos:
         if (colPadrao == colCorrente):
             return True
         else:
+            from classesFuncoes.log import Log
+            log = Log()
+            log.geraLogArquivo(nomeArquivo,'Número de colunas inválido') 
             return False
 
     #Recebe dataframe verifica quantidade de nulos e se o arquivo permite nulos
@@ -40,6 +43,9 @@ class Arquivos:
             if(nanPadrao == nanCorrente):
                 return True
             else:
+                from classesFuncoes.log import Log
+                log = Log()
+                log.geraLogArquivo(nomeArquivo,'Arquivo contém valores nulos')  
                 return False
         else:
             return True                
