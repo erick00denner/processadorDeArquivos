@@ -1,5 +1,12 @@
+'''
+CLASSE: Log
+
+Classe desenvolvida para criação de Logs de Arquivo e Logs de Sistema 
+
+'''
 class Log:
-    
+
+    #Recebe nome do arquivo e mensagem de erro e gera log    
     def geraLogArquivo(self,nomeArquivo,msg):
 
         from datetime import datetime
@@ -28,6 +35,7 @@ class Log:
         arquivo.writelines(frase)
         arquivo.close()
 
+    #Recebe mensagem de erro e gera log
     def geraLog(self,msg):
 
         from datetime import datetime
@@ -50,5 +58,6 @@ class Log:
         frase.append('   ')
         frase.append(msg)
         frase.append('\n')
+        
         arquivo.writelines(frase)
         arquivo.close()

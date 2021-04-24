@@ -1,10 +1,21 @@
+'''
+CLASSE: Banco
+
+Classe desenvolvida para inserção de dados já validados na base de dados 
+
+'''
 class Banco:
 
+    #Parametros de conexão com a base de dados
     def __init__(self):
 
         import pandas as pd
+        
         self.__df = pd.read_csv('config/configBancos.csv')
 
+    #Recebe nome da base de dados, query e dados para inserção. 
+    #Executa a query para validação mas não executa commit
+    #Retorna True == OK e False != OK
     def validaInsercao(self, banco, query, dados):
 
         import mysql.connector
@@ -48,7 +59,9 @@ class Banco:
         cnx.close()
 
         return True    
-    
+
+    #Recebe nome da base de dados, query e dados para inserção. 
+    #Executa a query e commit
     def executaComando(self, banco, query, dados):
 
         import mysql.connector
@@ -67,6 +80,7 @@ class Banco:
             from classesFuncoes.log import Log
 
             log = Log()
+
             log.geraLog('Não foi possível conectar com o banco. Classe: Banco Função: executaComando()')
 
         cursor = cnx.cursor()
@@ -84,6 +98,7 @@ class Banco:
             cnx.close()
             
             log = Log()
+            
             log.geraLog('Não foi possível executar query. Classe: Banco Função: executaComando() Erro:'+ err.msg)
             
             return False

@@ -1,7 +1,16 @@
+'''
+CLASSE: MetasAgencias
+
+Classe desenvolvida para tratamento do arquivo metasagencias.xlsx
+Arquivo utilizado para lançar valor total por unidade de acordo com metas cadastradas na classe Metas    
+
+'''
 class MetasAgencias:
 
+     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK
     def validaFormatoDados(self, df):
 
+        #Parametros de formato de campo e nome das colunas
         formatoDados = ['int64', 'int64', 'float64']
         nomeColunas = ['metaID', 'agencia', 'valorMeta']
 
@@ -13,10 +22,15 @@ class MetasAgencias:
         for item in formatoPlanilha:
             
             if(item != formatoDados[count]):
+
                 from classesFuncoes.log import Log
+                
                 log = Log()
+                
                 log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')
+                
                 return False
+            
             count += 1
 
         count = 0     
@@ -24,14 +38,22 @@ class MetasAgencias:
         for item in colunasPlanilha:
 
             if(item != colunasPlanilha[count]):
+                
                 from classesFuncoes.log import Log
+                
                 log = Log()
+                
                 log.geraLogArquivo(item,'Os nomes das colunas não corresponde ao esperado')
+                
                 return False
+            
             count +=1 
 
         return True      
 
+    #Recebe um data frame com dados para inserção e nome do arquivo já validados
+    #Prepara query 
+    #Utiliza a classe Banco para testar os dados de inserção e inserção no banco 
     def processaArquivoMetasAgencias(self, df, nomeArquivo):
         
         import pandas as pd
@@ -43,7 +65,10 @@ class MetasAgencias:
         arquivo = Arquivos()
         bd = Banco()
 
+        #Nome da base de dados
         banco='metas'
+
+        #Query para inserção na tabela ft_metaagencia 
         query ='INSERT INTO ft_metaagencia (fk_metaID, fk_agencia, valorMeta) VALUES (%s,%s,%s)'
 
         for index, row in df.iterrows():
@@ -82,6 +107,7 @@ class MetasAgencias:
                 return False
 
         if (sucesso):
+            
             log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
             arquivo.moveArquivo(nomeArquivo, True)    
 
