@@ -22,14 +22,25 @@ O sistema possui 3 arquivos pré-parametrizados, os quais são utilizados para a
 ## Descrição dos arquivos <a name="files"></a>
 
 config/configArquivo - Parametros de configuração dos arquivos processados pelo sistema
+
 config/configBanco - Parametros de conexão com base de dados
+
 config/configDiretorios - Parametros dos diretorios utilizados pelo sistema
+
 classesFuncoes/buscador - Funções de busca dos arquivos e instanciamento das classes e funções de processamento
+
 classesFuncoes/log - Funções de log do stackoverflow/so-survey-2017/data
+
 classesFuncoes/banco - Funções de armazenamento na base de das
+
 classesFuncoes/diretorios - Funções dos diretorios do stackoverflow/so-survey-2017/data
+
 classesFuncoes/configArquivo - Funções dos parametros dos arquivos 
+
 classesArquivos/arquivos - Funções de tratamento genérico dos arquivos
+
 classesArquivos/metas - Funções de arquivo pré-parametrizados
+
 classesArquivos/metasAgencias - Funções de arquivo pré-parametrizados
+
 classesArquivos/lancamentoMetas - Funções de arquivo pré-parametrizados
