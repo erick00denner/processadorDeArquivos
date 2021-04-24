@@ -7,17 +7,19 @@
 
 ## Instação <a name="installation"></a>
 
-Desenvoldivo utilizando Python versions 3.*.
+Desenvolvido utilizando Python versão 3.7 em ambiente Anaconda.
+
 Para utilizar o sistema, os arquivos config/configArquivo.csv, config/configDiretorios.csv e config/configBanco.csv devem ser parametrizados.
-A classe classesFuncoes/buscador.py deve receber o trecho de código para novos arquivos
-Uma nova classe deve ser desenvolvida em classesArquivos/ seguindo o modelo das classes existentes
+
+Para novos arquivos, a classe classesFuncoes/buscador deve receber o trecho de código, e
+uma nova classe deve ser desenvolvida em classesArquivos/ seguindo o modelo das classes existentes.
 
 ## Motivação do projeto<a name="motivation"></a>
 
-Como ainda existe grande fluxo de dados em planilhas do excel. Se faz necessário uma forma de armazenamento desses dados de forma estruturada. 
-Esse projeto é uma forma de automatizar esse processo de forma organizada e com segurança. 
-Ele busca os arquivos, verifica a estrutra dos arquivos e seus dados e armazena na base de dados.
-O sistema possui 3 arquivos pré-parametrizados, os quais são utilizados para armazenamento de dados de metas para serem consumidos por uma dashboard no Power BI.
+Como ainda existe grande fluxo de dados em planilhas do excel, se faz necessário o processamento e armazenamento desses dados de forma estruturada. 
+Esse projeto é uma forma de automatizar esse processo. 
+Com classes para busca de arquivos, verificação da estrutura dos arquivos, verificação dos dados e armazenamento em base de dados. E arquivos que permitem configurar o sistema em qualquer infraestrutura de TI e facilitam a inclusão de novos arquivos. É uma forma de adicionar segurança e previsibilidade ao processo.   
+O sistema possui 3 arquivos "pré-parametrizados" para exemplo, eles são utilizados para fornecer dados de metas que serão consumidos por uma dashboard no Power BI.
 
 ## Descrição dos arquivos <a name="files"></a>
 
@@ -29,11 +31,11 @@ config/configDiretorios - Parametros dos diretorios utilizados pelo sistema
 
 classesFuncoes/buscador - Funções de busca dos arquivos e instanciamento das classes e funções de processamento
 
-classesFuncoes/log - Funções de log do stackoverflow/so-survey-2017/data
+classesFuncoes/log - Funções de log do sistema
 
 classesFuncoes/banco - Funções de armazenamento na base de das
 
-classesFuncoes/diretorios - Funções dos diretorios do stackoverflow/so-survey-2017/data
+classesFuncoes/diretorios - Funções dos diretorios do sistema
 
 classesFuncoes/configArquivo - Funções dos parametros dos arquivos 
 
@@ -44,3 +46,5 @@ classesArquivos/metas - Funções de arquivo pré-parametrizados
 classesArquivos/metasAgencias - Funções de arquivo pré-parametrizados
 
 classesArquivos/lancamentoMetas - Funções de arquivo pré-parametrizados
+
+metas.sql - Script SQL de criação da base de dados para armazenamento metas
