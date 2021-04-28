@@ -96,7 +96,17 @@ class Arquivos:
             arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
             renomeia = diretorio.processados +'/'+nomeArquivo +'_success_'+data+'.'+extencao
             
-            os.rename(arquivo,renomeia)
+            lista_arquivos = os.listdir(diretorio.processados)
+            qtd_arquivos = sum(nomeArquivo +'_success_'+data in s for s in lista_arquivos)
+            
+            if(qtd_arquivos == 0):
+
+                os.rename(arquivo,renomeia)
+            
+            else:
+                qtd_arquivos += 1
+                renomeia = diretorio.processados +'/'+nomeArquivo +'_success_'+data+'_'+str(qtd_arquivos)+'.'+extencao
+                os.rename(arquivo,renomeia)
 
         else:
 
@@ -111,4 +121,15 @@ class Arquivos:
             arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
             renomeia = diretorio.processados +'/'+nomeArquivo +'_error_'+data+'.'+extencao            
             
-            os.rename(arquivo,renomeia)
+            lista_arquivos = os.listdir(diretorio.processados)
+            qtd_arquivos = sum(nomeArquivo +'_error_'+data in s for s in lista_arquivos)
+            
+            if(qtd_arquivos == 0):
+
+                os.rename(arquivo,renomeia)
+            
+            else:
+                
+                qtd_arquivos += 1
+                renomeia = diretorio.processados +'/'+nomeArquivo +'_error_'+data+'_'+str(qtd_arquivos)+'.'+extencao
+                os.rename(arquivo,renomeia)
