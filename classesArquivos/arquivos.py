@@ -80,23 +80,32 @@ class Arquivos:
         from datetime import datetime
         
         diretorio = Diretorios()
-        data = datetime.now()
-        data = data.strftime('%d-%m-%Y')
+        date_time = datetime.now()
+        data = date_time.strftime('%d-%m-%Y')
+        mes_ano = date_time.strftime('%m-%Y')
 
         if(sucesso):
 
             arquivo = diretorio.source + '/' + nomeArquivo
+            diretorioDestino = diretorio.processados+'/'+mes_ano
 
-            shutil.move(arquivo,diretorio.processados)
+            if(os.path.exists(diretorioDestino)):
+
+                shutil.move(arquivo, diretorioDestino)
+
+            else:
+
+                os.mkdir(diretorioDestino)
+                shutil.move(arquivo, diretorioDestino)    
 
             quebraNome = nomeArquivo.split('.')
             nomeArquivo = quebraNome[0]
             extencao = quebraNome[1]
             
-            arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
-            renomeia = diretorio.processados +'/'+nomeArquivo +'_success_'+data+'.'+extencao
+            arquivo = diretorio.processados +'/'+mes_ano+'/'+nomeArquivo+'.'+extencao
+            renomeia = diretorio.processados+'/'+mes_ano+'/'+nomeArquivo +'_success_'+data+'.'+extencao
             
-            lista_arquivos = os.listdir(diretorio.processados)
+            lista_arquivos = os.listdir(diretorio.processados+'/'+mes_ano)
             qtd_arquivos = sum(nomeArquivo +'_success_'+data in s for s in lista_arquivos)
             
             if(qtd_arquivos == 0):
@@ -104,24 +113,33 @@ class Arquivos:
                 os.rename(arquivo,renomeia)
             
             else:
+                
                 qtd_arquivos += 1
-                renomeia = diretorio.processados +'/'+nomeArquivo +'_success_'+data+'_'+str(qtd_arquivos)+'.'+extencao
+                renomeia = diretorio.processados+'/'+mes_ano+'/'+nomeArquivo +'_success_'+data+'_'+str(qtd_arquivos)+'.'+extencao
                 os.rename(arquivo,renomeia)
 
         else:
 
             arquivo = diretorio.source + '/' + nomeArquivo
+            diretorioDestino = diretorio.processados+'/'+mes_ano
 
-            shutil.move(arquivo,diretorio.processados)
+            if(os.path.exists(diretorioDestino)):
+
+                shutil.move(arquivo, diretorioDestino)
+
+            else:
+
+                os.mkdir(diretorioDestino)
+                shutil.move(arquivo, diretorioDestino)    
             
             quebraNome = nomeArquivo.split('.')
             nomeArquivo = quebraNome[0]
             extencao = quebraNome[1]
             
-            arquivo = diretorio.processados + '/' + nomeArquivo+'.'+extencao
-            renomeia = diretorio.processados +'/'+nomeArquivo +'_error_'+data+'.'+extencao            
+            arquivo = diretorio.processados+'/'+mes_ano+'/'+nomeArquivo+'.'+extencao
+            renomeia = diretorio.processados+'/'+mes_ano+'/'+nomeArquivo +'_error_'+data+'.'+extencao            
             
-            lista_arquivos = os.listdir(diretorio.processados)
+            lista_arquivos = os.listdir(diretorio.processados+'/'+mes_ano)
             qtd_arquivos = sum(nomeArquivo +'_error_'+data in s for s in lista_arquivos)
             
             if(qtd_arquivos == 0):
@@ -131,5 +149,5 @@ class Arquivos:
             else:
                 
                 qtd_arquivos += 1
-                renomeia = diretorio.processados +'/'+nomeArquivo +'_error_'+data+'_'+str(qtd_arquivos)+'.'+extencao
+                renomeia = diretorio.processados+'/'+mes_ano+'/'+nomeArquivo +'_error_'+data+'_'+str(qtd_arquivos)+'.'+extencao
                 os.rename(arquivo,renomeia)

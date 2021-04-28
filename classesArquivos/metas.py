@@ -84,7 +84,7 @@ class Metas:
 
             if(not sucesso):
 
-                log.geraLogArquivo(nomeArquivo,'Falha ao validar inserção do arquivo')        
+                log.geraLogArquivo(nomeArquivo,'Falha ao validar inserção dos dados')        
                 arquivo.moveArquivo(nomeArquivo, False)
 
                 return False
