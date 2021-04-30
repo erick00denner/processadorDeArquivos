@@ -1,2 +1,5 @@
 arquivo,nomeArquivo,numColunas,permiteNaN
-Metas,metas.xlsx,4,0 
+Metas,metas.xlsx,4,0
+Metas Agencias,metasagencias.xlsx,3,0
+Lançamentos Metas,lancamentosmetas.xlsx,4,0
+

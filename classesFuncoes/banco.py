@@ -106,4 +106,64 @@ class Banco:
         cursor.close()
         cnx.close()
 
-        return True    
+        return True
+
+    def verificaRegistro(self, banco, query):        
+        pass
+    
+    def retornaChavePrimaria(self, banco, query):
+        
+        import mysql.connector
+
+        dadosBD = self.__df.loc[self.__df['banco'] == banco]
+        
+        try:
+
+            cnx = mysql.connector.connect(user=dadosBD.usuario[0], 
+                                        password=dadosBD.senha[0],
+                                        host=dadosBD.host[0],
+                                        database=dadosBD.banco[0])
+
+        except:
+
+            from classesFuncoes.log import Log
+
+            log = Log()
+
+            log.geraLog('Não foi possível conectar com o banco. Classe: Banco Função: retornaChavePrimaria()')
+
+        cursor = cnx.cursor(buffered=True)
+        
+        try:
+            
+            cursor.execute(query)
+            chave_primaria = cursor.fetchone()
+            
+            if chave_primaria is None:  
+                
+                from classesFuncoes.log import Log
+
+                log = Log()
+
+                log.geraLog('Registro não encontrado. Classe: Banco Função: retornaChavePrimaria() ' + query )
+
+                return False
+
+        except mysql.connector.Error as err:
+
+            from classesFuncoes.log import Log
+
+            cursor.close()
+            cnx.close()
+            
+            log = Log()
+            
+            log.geraLog('Não foi possível executar query. Classe: Banco Função: retornaChavePrimaria() Erro:'+ err.msg)
+            
+            return False
+
+
+        cursor.close()
+        cnx.close()
+        
+        return chave_primaria

@@ -73,19 +73,21 @@ class Buscador:
 #Para adicionar novos arquivos no sistema, seguir estrutura marcada a seguir
 #################################################################################
 
-            if (item == 'metas.xlsx'):                 
+            if (item == 'metas.xlsx'):    
+
+                from classesArquivos.metas import Metas
+                        
+                meta = Metas()             
                 
                 df = arquivo.leArquivo(diretorio.source, item)
+
+                df = meta.adiconaFKnoDF(df) 
 
                 if(arquivo.verificaColunas(df,item)):
 
                     if(arquivo.vericaNulos(df,item)):
-                        
-                        from classesArquivos.metas import Metas
-                        
-                        meta = Metas()
-                        
-                        if (meta.validaFormatoDados(df)):
+                                               
+                        if (meta.validaFormatoDados(df,item)):
                             
                             meta.processaArquivoMeta(df, item)    
 
@@ -93,17 +95,19 @@ class Buscador:
             
             if (item == 'metasagencias.xlsx'):                 
                 
+                from classesArquivos.metasAgencias import MetasAgencias
+
+                metaag = MetasAgencias()
+
                 df = arquivo.leArquivo(diretorio.source, item)
+
+                df = metaag.adiconaFKnoDF(df) 
 
                 if(arquivo.verificaColunas(df,item)):
                     
                     if(arquivo.vericaNulos(df,item)):
-                    
-                        from classesArquivos.metasAgencias import MetasAgencias
-
-                        metaag = MetasAgencias()
-                        
-                        if (metaag.validaFormatoDados(df)):
+                                            
+                        if (metaag.validaFormatoDados(df,item)):
                             
                             metaag.processaArquivoMetasAgencias(df, item)           
 
@@ -119,7 +123,7 @@ class Buscador:
                         
                         lanMeta = LancamentoMetas()
                         
-                        if (lanMeta.validaFormatoDados(df)):
+                        if (lanMeta.validaFormatoDados(df,item)):
                             
                             lanMeta.processaArquivoLancamentoMetas(df, item)
 

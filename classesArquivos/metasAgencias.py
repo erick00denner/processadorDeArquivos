@@ -7,8 +7,30 @@ Arquivo utilizado para lançar valor total por unidade de acordo com metas cadas
 '''
 class MetasAgencias:
 
+    def adiconaFKnoDF(self, df):
+
+        from classesFuncoes.banco import Banco
+        import pandas as pd
+
+        bd = Banco()
+        banco = 'metas'
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.metaID
+
+            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+argumento+"'"
+
+            fk = bd.retornaChavePrimaria(banco,query)
+            
+            df.loc[index,'metaID'] = fk[0]
+        
+        df['metaID'] = pd.to_numeric(df['metaID'])
+
+        return df
+
      #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK
-    def validaFormatoDados(self, df):
+    def validaFormatoDados(self, df, nomeArquivo):
 
         #Parametros de formato de campo e nome das colunas
         formatoDados = ['int64', 'int64', 'float64']
@@ -27,7 +49,7 @@ class MetasAgencias:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')
+                log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')
                 
                 return False
             
@@ -43,7 +65,7 @@ class MetasAgencias:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'Os nomes das colunas não corresponde ao esperado')
+                log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')
                 
                 return False
             

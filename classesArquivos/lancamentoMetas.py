@@ -8,7 +8,7 @@ Arquivo utilizado para lançar valores utilizados no calculo do acumulado já at
 class LancamentoMetas:
     
     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK 
-    def validaFormatoDados(self, df):
+    def validaFormatoDados(self, df, nomeArquivo):
 
         #Parametros de formato de campo e nome das colunas
         formatoDados = ['int64', 'int64', 'datetime64[ns]', 'float64']
@@ -27,7 +27,7 @@ class LancamentoMetas:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')
+                log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')
                 
                 return False
 
@@ -43,7 +43,7 @@ class LancamentoMetas:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'Os nomes das colunas não corresponde ao esperado')
+                log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')
                 
                 return False
             

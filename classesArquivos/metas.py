@@ -6,9 +6,31 @@ Arquivo utilizado para lançar metas com seu período de vigência e parametro d
 
 '''
 class Metas:
+
+    def adiconaFKnoDF(self, df):
+
+        from classesFuncoes.banco import Banco
+        import pandas as pd
+
+        bd = Banco()
+        banco = 'metas'
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.undMedida
+
+            query = "SELECT unidadeID FROM dim_unidadesmedida WHERE unidadeNome = '"+argumento+"'"
+
+            fk = bd.retornaChavePrimaria(banco,query)
+            
+            df.loc[index,'undMedida'] = fk[0]
+        
+        df['undMedida'] = pd.to_numeric(df['undMedida'])
+
+        return df
     
     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK 
-    def validaFormatoDados(self, df):
+    def validaFormatoDados(self,df,nomeArquivo):
 
         #Parametros de formato de campo e nome das colunas
         formatoDados = ['object', 'datetime64[ns]', 'datetime64[ns]', 'int64']
@@ -27,7 +49,7 @@ class Metas:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'O formato dos dados não corresponde ao esperado')  
+                log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')  
                 
                 return False
             
@@ -43,7 +65,7 @@ class Metas:
                 
                 log = Log()
                 
-                log.geraLogArquivo(item,'Os nomes das colunas não corresponde ao esperado')  
+                log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')  
                 
                 return False
             
