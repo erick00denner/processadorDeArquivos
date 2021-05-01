@@ -55,3 +55,13 @@ class ConfigArquivo:
             self.__permiteNaN = arquivos.loc[arquivos['nomeArquivo'] == nomeArquivo]['permiteNaN'].values.item()
             
             return self.__permiteNaN               
+
+      #Recebe nome do arquivo e retorna banco de dados onde os dados serão armazenados
+      def banco(self, nomeArquivo):
+            
+            import pandas as pd 
+            
+            arquivos = pd.read_csv('config/configArquivos.csv')
+            self.__banco = arquivos.loc[arquivos['nomeArquivo'] == nomeArquivo]['banco'].values.item()
+            
+            return self.__banco              

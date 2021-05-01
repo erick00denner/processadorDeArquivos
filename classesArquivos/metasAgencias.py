@@ -7,33 +7,27 @@ Arquivo utilizado para lançar valor total por unidade de acordo com metas cadas
 '''
 class MetasAgencias:
 
-    def adiconaFKnoDF(self, df):
-
-        from classesFuncoes.banco import Banco
-        import pandas as pd
-
-        bd = Banco()
-        banco = 'metas'
-
-        for index, linha in df.iterrows():
-    
-            argumento = linha.metaID
-
-            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+argumento+"'"
-
-            fk = bd.retornaChavePrimaria(banco,query)
-            
-            df.loc[index,'metaID'] = fk[0]
+    def __init__(self):
         
-        df['metaID'] = pd.to_numeric(df['metaID'])
+        from classesFuncoes.configArquivo import ConfigArquivo
+        
+        config = ConfigArquivo()
 
-        return df
+        nomeArquivo = 'metasagencias.xlsx'
 
-     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK
+        self.__banco = config.banco(nomeArquivo)
+
+    #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK
     def validaFormatoDados(self, df, nomeArquivo):
 
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+                
+        log = Log()
+        arquivo = Arquivos()                
+
         #Parametros de formato de campo e nome das colunas
-        formatoDados = ['int64', 'int64', 'float64']
+        formatoDados = ['object', 'int64', 'float64']
         nomeColunas = ['metaID', 'agencia', 'valorMeta']
 
         formatoPlanilha = df.dtypes
@@ -45,12 +39,9 @@ class MetasAgencias:
             
             if(item != formatoDados[count]):
 
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+                arquivo.moveArquivo(nomeArquivo, False)    
                 log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')
-                
+
                 return False
             
             count += 1
@@ -61,10 +52,7 @@ class MetasAgencias:
 
             if(item != colunasPlanilha[count]):
                 
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+                arquivo.moveArquivo(nomeArquivo, False)
                 log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')
                 
                 return False
@@ -87,9 +75,6 @@ class MetasAgencias:
         arquivo = Arquivos()
         bd = Banco()
 
-        #Nome da base de dados
-        banco='metas'
-
         #Query para inserção na tabela ft_metaagencia 
         query ='INSERT INTO ft_metaagencia (fk_metaID, fk_agencia, valorMeta) VALUES (%s,%s,%s)'
 
@@ -101,7 +86,7 @@ class MetasAgencias:
             dados.append(row.agencia)
             dados.append(row.valorMeta)
             
-            sucesso = bd.validaInsercao(banco, query, dados)
+            sucesso = bd.validaInsercao(self.__banco, query, dados)
 
             if(not sucesso):
 
@@ -119,7 +104,7 @@ class MetasAgencias:
             dados.append(row.agencia)
             dados.append(row.valorMeta)
 
-            sucesso = bd.executaComando(banco,query,dados)
+            sucesso = bd.executaComando(self.__banco,query,dados)
 
             if (not sucesso):
 
@@ -133,5 +118,53 @@ class MetasAgencias:
             log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
             arquivo.moveArquivo(nomeArquivo, True)    
 
+    def adiconaFKnoDF(self, df):
+
+        from classesFuncoes.banco import Banco
+        import pandas as pd
+
+        bd = Banco()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.metaID
+
+            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+argumento+"'"
+
+            fk = bd.retornaChavePrimaria(self.__banco,query)
+            
+            df.loc[index,'metaID'] = fk[0]
+        
+        df['metaID'] = pd.to_numeric(df['metaID'])
+
+        return df
+
+    def validarRegistrosInserção(self, df, nomeArquivo):
+
+        from classesFuncoes.banco import Banco
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+        import pandas as pd
+
+        bd = Banco()
+        log = Log()
+        arquivo = Arquivos()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.metaID
+
+            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+str(argumento)+"'"
+
+            validacao = bd.verificarExistenciaRegistro(self.__banco, query)
+
+            if (validacao == False):
+                
+                log.geraLogArquivo(nomeArquivo,'Falha ao processar arquivo')        
+                arquivo.moveArquivo(nomeArquivo, False)
+
+                return False
+
+        return True
             
             

@@ -81,15 +81,16 @@ class Buscador:
                 
                 df = arquivo.leArquivo(diretorio.source, item)
 
-                df = meta.adiconaFKnoDF(df) 
-
                 if(arquivo.verificaColunas(df,item)):
 
                     if(arquivo.vericaNulos(df,item)):
                                                
                         if (meta.validaFormatoDados(df,item)):
-                            
-                            meta.processaArquivoMeta(df, item)    
+
+                            if(meta.validarRegistrosInserção(df, item)):
+
+                                df = meta.adiconaFKnoDF(df) 
+                                meta.processaArquivoMeta(df, item)    
 
 ################################################################################
             
@@ -101,17 +102,22 @@ class Buscador:
 
                 df = arquivo.leArquivo(diretorio.source, item)
 
-                df = metaag.adiconaFKnoDF(df) 
-
                 if(arquivo.verificaColunas(df,item)):
                     
                     if(arquivo.vericaNulos(df,item)):
                                             
                         if (metaag.validaFormatoDados(df,item)):
-                            
-                            metaag.processaArquivoMetasAgencias(df, item)           
 
-            if (item == 'lancamentosmetas.xlsx'):                 
+                            if (metaag.validarRegistrosInserção(df, item)):
+
+                                df = metaag.adiconaFKnoDF(df)    
+                                metaag.processaArquivoMetasAgencias(df, item)           
+
+            if (item == 'lancamentosmetas.xlsx'):     
+
+                from classesArquivos.lancamentoMetas import LancamentoMetas
+                        
+                lanMeta = LancamentoMetas()
 
                 df = arquivo.leArquivo(diretorio.source, item)
 
@@ -119,13 +125,13 @@ class Buscador:
 
                     if(arquivo.vericaNulos(df,item)):
 
-                        from classesArquivos.lancamentoMetas import LancamentoMetas
-                        
-                        lanMeta = LancamentoMetas()
-                        
                         if (lanMeta.validaFormatoDados(df,item)):
                             
-                            lanMeta.processaArquivoLancamentoMetas(df, item)
+                            if (lanMeta.validarRegistrosInserção(df, item)):
+
+                                df = lanMeta.adiconaFKnoDF(df)       
+                                      
+                                lanMeta.processaArquivoLancamentoMetas(df, item)
 
 
                                                             

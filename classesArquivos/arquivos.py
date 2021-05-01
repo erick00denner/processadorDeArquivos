@@ -20,10 +20,13 @@ class Arquivos:
     def verificaColunas(self, df, nomeArquivo):
         
         import pandas as pd
-
         from classesFuncoes.configArquivo import ConfigArquivo
-
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+            
+        log = Log()
         configArquivo = ConfigArquivo()
+        arquivo = Arquivos()
 
         colPadrao = configArquivo.numColunas(nomeArquivo)
         colCorrente = df.shape[1]
@@ -34,9 +37,7 @@ class Arquivos:
 
         else:
 
-            from classesFuncoes.log import Log
-            
-            log = Log()
+            arquivo.moveArquivo(nomeArquivo, False)
             log.geraLogArquivo(nomeArquivo,'Número de colunas inválido') 
             
             return False
@@ -46,8 +47,12 @@ class Arquivos:
         
         import pandas as pd
         from classesFuncoes.configArquivo import ConfigArquivo
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
 
+        log = Log()
         configArquivo = ConfigArquivo()
+        arquivo = Arquivos()
 
         nanPadrao = configArquivo.permiteNaN(nomeArquivo)
         nanCorrente = df.isna().sum().sum()    
@@ -60,9 +65,7 @@ class Arquivos:
 
             else:
 
-                from classesFuncoes.log import Log
-
-                log = Log()
+                arquivo.moveArquivo(nomeArquivo, False)
                 log.geraLogArquivo(nomeArquivo,'Arquivo contém valores nulos')  
                 
                 return False

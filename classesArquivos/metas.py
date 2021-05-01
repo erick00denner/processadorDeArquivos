@@ -7,33 +7,27 @@ Arquivo utilizado para lançar metas com seu período de vigência e parametro d
 '''
 class Metas:
 
-    def adiconaFKnoDF(self, df):
-
-        from classesFuncoes.banco import Banco
-        import pandas as pd
-
-        bd = Banco()
-        banco = 'metas'
-
-        for index, linha in df.iterrows():
-    
-            argumento = linha.undMedida
-
-            query = "SELECT unidadeID FROM dim_unidadesmedida WHERE unidadeNome = '"+argumento+"'"
-
-            fk = bd.retornaChavePrimaria(banco,query)
-            
-            df.loc[index,'undMedida'] = fk[0]
+    def __init__(self):
         
-        df['undMedida'] = pd.to_numeric(df['undMedida'])
+        from classesFuncoes.configArquivo import ConfigArquivo
+        
+        config = ConfigArquivo()
 
-        return df
-    
+        nomeArquivo = 'metas.xlsx'
+
+        self.__banco = config.banco(nomeArquivo)
+
     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK 
     def validaFormatoDados(self,df,nomeArquivo):
 
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+
+        arquivo = Arquivos()        
+        log = Log()
+
         #Parametros de formato de campo e nome das colunas
-        formatoDados = ['object', 'datetime64[ns]', 'datetime64[ns]', 'int64']
+        formatoDados = ['object', 'datetime64[ns]', 'datetime64[ns]', 'object']
         nomeColunas = ['nomeMeta','inicioVigencia', 'fimVigencia', 'undMedida']
 
         formatoPlanilha = df.dtypes
@@ -45,10 +39,7 @@ class Metas:
 
             if(item != formatoDados[count]):
 
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+                arquivo.moveArquivo(nomeArquivo, False)
                 log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')  
                 
                 return False
@@ -61,10 +52,7 @@ class Metas:
             
             if(item != nomeColunas[count]):
 
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+                arquivo.moveArquivo(nomeArquivo, False)
                 log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')  
                 
                 return False
@@ -87,9 +75,6 @@ class Metas:
         arquivo = Arquivos()
         bd = Banco()          
        
-        #Nome da base de dados 
-        banco='metas'
-
         #Query para inserção na tabela dim_meta     
         query ='INSERT INTO dim_meta (metaNome, inicioVigencia, fimVigencia, fk_unidadeMedida) VALUES (%s,%s,%s,%s)'
    
@@ -102,7 +87,7 @@ class Metas:
             dados.append(row.fimVigencia)
             dados.append(row.undMedida)
             
-            sucesso = bd.validaInsercao(banco, query, dados)
+            sucesso = bd.validaInsercao(self.__banco, query, dados)
 
             if(not sucesso):
 
@@ -120,7 +105,7 @@ class Metas:
             dados.append(row.fimVigencia)
             dados.append(row.undMedida)  
 
-            sucesso = bd.executaComando(banco,query,dados)
+            sucesso = bd.executaComando(self.__banco,query,dados)
 
             if (not sucesso):
 
@@ -134,5 +119,54 @@ class Metas:
             log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
             arquivo.moveArquivo(nomeArquivo, True)    
 
+    def adiconaFKnoDF(self, df):
+
+        from classesFuncoes.banco import Banco
+        import pandas as pd
+
+        bd = Banco()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.undMedida
+
+            query = "SELECT unidadeID FROM dim_unidadesmedida WHERE unidadeNome = '"+str(argumento)+"'"
+
+            fk = bd.retornaChavePrimaria(self.__banco,query)
+            
+            df.loc[index,'undMedida'] = fk[0]
+        
+        df['undMedida'] = pd.to_numeric(df['undMedida'])
+
+        return df
+
+
+    def validarRegistrosInserção(self, df, nomeArquivo):
+
+        from classesFuncoes.banco import Banco
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+        import pandas as pd
+
+        bd = Banco()
+        log = Log()
+        arquivo = Arquivos()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.undMedida
+
+            query = "SELECT unidadeID FROM dim_unidadesmedida WHERE unidadeNome = '"+str(argumento)+"'"
+
+            validacao = bd.verificarExistenciaRegistro(self.__banco, query)
+
+            if (validacao == False):
+                
+                log.geraLogArquivo(nomeArquivo,'Falha ao processar arquivo')        
+                arquivo.moveArquivo(nomeArquivo, False)
+
+                return False
+
+        return True
 
 

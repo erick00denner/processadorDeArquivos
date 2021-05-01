@@ -1,5 +1,5 @@
-arquivo,nomeArquivo,numColunas,permiteNaN
-Metas,metas.xlsx,4,0
-Metas Agencias,metasagencias.xlsx,3,0
-Lançamentos Metas,lancamentosmetas.xlsx,4,0
+arquivo,nomeArquivo,numColunas,permiteNaN,banco
+Metas,metas.xlsx,4,0,metas
+Metas Agencias,metasagencias.xlsx,3,0,metas
+Lançamentos Metas,lancamentosmetas.xlsx,4,0,metas
 

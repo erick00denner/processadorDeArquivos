@@ -6,12 +6,28 @@ Arquivo utilizado para lançar valores utilizados no calculo do acumulado já at
 
 '''
 class LancamentoMetas:
+
+    def __init__(self):
+        
+        from classesFuncoes.configArquivo import ConfigArquivo
+        
+        config = ConfigArquivo()
+
+        nomeArquivo = 'lancamentosmetas.xlsx'
+
+        self.__banco = config.banco(nomeArquivo)
     
     #Recebe um dataframe e valida de acordo com parametros configurados. Retorna True == OK e False != OK 
     def validaFormatoDados(self, df, nomeArquivo):
 
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+
+        log = Log()
+        arquivo = Arquivos()            
+
         #Parametros de formato de campo e nome das colunas
-        formatoDados = ['int64', 'int64', 'datetime64[ns]', 'float64']
+        formatoDados = ['int64', 'object', 'datetime64[ns]', 'float64']
         nomeColunas = ['posto', 'meta', 'dataVigencia', 'valorLancamento']
 
         formatoPlanilha = df.dtypes
@@ -23,10 +39,7 @@ class LancamentoMetas:
 
             if(item != formatoDados[count]):
                 
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+                arquivo.moveArquivo(nomeArquivo, False)
                 log.geraLogArquivo(nomeArquivo,'O formato dos dados não corresponde ao esperado')
                 
                 return False
@@ -38,11 +51,8 @@ class LancamentoMetas:
         for item in colunasPlanilha:
 
             if(item != colunasPlanilha[count]):
-                
-                from classesFuncoes.log import Log
-                
-                log = Log()
-                
+
+                arquivo.moveArquivo(nomeArquivo, False)    
                 log.geraLogArquivo(nomeArquivo,'Os nomes das colunas não corresponde ao esperado')
                 
                 return False
@@ -65,9 +75,6 @@ class LancamentoMetas:
         arquivo = Arquivos()
         bd = Banco()
 
-        #Nome da base de dados
-        banco='metas'
-
         #Query para inserção na tabela ft_lancamentometas     
         query ='INSERT INTO ft_lancamentometas (fk_postoAgencia, fk_metaID, dataVigencia, valorLancamento) VALUES (%s,%s,%s,%s)'
    
@@ -80,7 +87,7 @@ class LancamentoMetas:
             dados.append(row.dataVigencia)
             dados.append(row.valorLancamento)
             
-            sucesso = bd.validaInsercao(banco, query, dados)
+            sucesso = bd.validaInsercao(self.__banco, query, dados)
 
             if(not sucesso):
 
@@ -98,7 +105,7 @@ class LancamentoMetas:
             dados.append(row.dataVigencia)
             dados.append(row.valorLancamento)
             
-            sucesso = bd.executaComando(banco,query,dados)
+            sucesso = bd.executaComando(self.__banco,query,dados)
 
             if (not sucesso):
 
@@ -110,7 +117,56 @@ class LancamentoMetas:
         if (sucesso):
 
             log.geraLogArquivo(nomeArquivo,'Arquivo processado com sucesso')        
-            arquivo.moveArquivo(nomeArquivo, True)    
+            arquivo.moveArquivo(nomeArquivo, True)
+    
+    def adiconaFKnoDF(self, df):
+
+        from classesFuncoes.banco import Banco
+        import pandas as pd
+
+        bd = Banco()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.meta
+
+            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+argumento+"'"
+
+            fk = bd.retornaChavePrimaria(self.__banco,query)
+            
+            df.loc[index,'meta'] = fk[0]
+        
+        df['meta'] = pd.to_numeric(df['meta'])
+
+        return df
+
+    def validarRegistrosInserção(self, df, nomeArquivo):
+
+        from classesFuncoes.banco import Banco
+        from classesFuncoes.log import Log
+        from classesArquivos.arquivos import Arquivos
+        import pandas as pd
+
+        bd = Banco()
+        log = Log()
+        arquivo = Arquivos()
+
+        for index, linha in df.iterrows():
+    
+            argumento = linha.meta
+
+            query = "SELECT metaID FROM dim_meta WHERE metaNome = '"+str(argumento)+"'"
+
+            validacao = bd.verificarExistenciaRegistro(self.__banco, query)
+
+            if (validacao == False):
+                
+                log.geraLogArquivo(nomeArquivo,'Falha ao processar arquivo')        
+                arquivo.moveArquivo(nomeArquivo, False)
+
+                return False
+
+        return True    
 
 
 
