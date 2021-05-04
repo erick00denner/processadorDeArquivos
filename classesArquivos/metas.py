@@ -27,8 +27,8 @@ class Metas:
         log = Log()
 
         #Parametros de formato de campo e nome das colunas
-        formatoDados = ['object', 'datetime64[ns]', 'datetime64[ns]', 'object']
-        nomeColunas = ['nomeMeta','inicioVigencia', 'fimVigencia', 'undMedida']
+        formatoDados = ['object', 'datetime64[ns]', 'datetime64[ns]', 'object','bool']
+        nomeColunas = ['nomeMeta','inicioVigencia', 'fimVigencia', 'undMedida','metaPositiva']
 
         formatoPlanilha = df.dtypes
         colunasPlanilha = list(df.columns)
@@ -76,7 +76,7 @@ class Metas:
         bd = Banco()          
        
         #Query para inserção na tabela dim_meta     
-        query ='INSERT INTO dim_meta (metaNome, inicioVigencia, fimVigencia, fk_unidadeMedida) VALUES (%s,%s,%s,%s)'
+        query ='INSERT INTO dim_meta (metaNome, inicioVigencia, fimVigencia, fk_unidadeMedida, metaPositiva) VALUES (%s,%s,%s,%s,%s)'
    
         for index, row in df.iterrows():
 
@@ -86,7 +86,8 @@ class Metas:
             dados.append(row.inicioVigencia)
             dados.append(row.fimVigencia)
             dados.append(row.undMedida)
-            
+            dados.append(row.metaPositiva)
+
             sucesso = bd.validaInsercao(self.__banco, query, dados)
 
             if(not sucesso):
@@ -104,6 +105,7 @@ class Metas:
             dados.append(row.inicioVigencia)
             dados.append(row.fimVigencia)
             dados.append(row.undMedida)  
+            dados.append(row.metaPositiva)
 
             sucesso = bd.executaComando(self.__banco,query,dados)
 

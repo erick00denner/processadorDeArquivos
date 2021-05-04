@@ -4,6 +4,7 @@ CREATE TABLE `dim_meta` (
 	`inicioVigencia` DATE NOT NULL,
 	`fimVigencia` DATE NOT NULL,
 	`fk_unidadeMedida` int NOT NULL,
+	`metaPositiva` bool NOT NULL,
 	PRIMARY KEY (`metaID`)
 );
 

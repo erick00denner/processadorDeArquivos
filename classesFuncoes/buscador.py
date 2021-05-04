@@ -129,8 +129,7 @@ class Buscador:
                             
                             if (lanMeta.validarRegistrosInserção(df, item)):
 
-                                df = lanMeta.adiconaFKnoDF(df)       
-                                      
+                                df = lanMeta.adiconaFKnoDF(df)                                   
                                 lanMeta.processaArquivoLancamentoMetas(df, item)
 
 

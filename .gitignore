@@ -132,3 +132,4 @@ configBancos.csv
 log/
 source/
 processados/
+.json/
