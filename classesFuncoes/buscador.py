@@ -97,8 +97,10 @@ class Buscador:
             if (item == 'metasagencias.xlsx'):                 
                 
                 from classesArquivos.metasAgencias import MetasAgencias
+                from classesDados.metasAgencias import DadosMetasAgencias
 
                 metaag = MetasAgencias()
+                dados_meta_ag = DadosMetasAgencias()
 
                 df = arquivo.leArquivo(diretorio.source, item)
 
@@ -111,13 +113,16 @@ class Buscador:
                             if (metaag.validarRegistrosInserção(df, item)):
 
                                 df = metaag.adiconaFKnoDF(df)    
-                                metaag.processaArquivoMetasAgencias(df, item)           
+                                metaag.processaArquivoMetasAgencias(df, item)
+                                dados_meta_ag.geraDados()           
 
             if (item == 'lancamentosmetas.xlsx'):     
 
                 from classesArquivos.lancamentoMetas import LancamentoMetas
+                from classesDados.lancamentoMetas import DadosLancamentoMetas
                         
                 lanMeta = LancamentoMetas()
+                dados_lan_meta = DadosLancamentoMetas()
 
                 df = arquivo.leArquivo(diretorio.source, item)
 
@@ -131,6 +136,7 @@ class Buscador:
 
                                 df = lanMeta.adiconaFKnoDF(df)                                   
                                 lanMeta.processaArquivoLancamentoMetas(df, item)
+                                dados_lan_meta.geraDados()
 
 
                                                             

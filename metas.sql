@@ -1,10 +1,10 @@
 CREATE TABLE `dim_meta` (
-	`metaID` INT NOT NULL AUTO_INCREMENT,
+	`metaID` int NOT NULL AUTO_INCREMENT,
 	`metaNome` TEXT NOT NULL,
 	`inicioVigencia` DATE NOT NULL,
 	`fimVigencia` DATE NOT NULL,
 	`fk_unidadeMedida` int NOT NULL,
-	`metaPositiva` bool NOT NULL,
+	`metaPositiva` BOOLEAN NOT NULL,
 	PRIMARY KEY (`metaID`)
 );
 
@@ -14,6 +14,7 @@ CREATE TABLE `ft_lancamentoMetas` (
 	`fk_metaID` int NOT NULL,
 	`dataVigencia` DATE NOT NULL,
 	`valorLancamento` FLOAT NOT NULL,
+	`difLancamentoAnterior` FLOAT,
 	PRIMARY KEY (`lancamentoID`)
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE `ft_metaAgencia` (
 	`fk_metaID` int NOT NULL,
 	`fk_agencia` int NOT NULL,
 	`valorMeta` FLOAT NOT NULL,
+	`metaDividida` FLOAT,
 	PRIMARY KEY (`metaAgencia`)
 );
 
